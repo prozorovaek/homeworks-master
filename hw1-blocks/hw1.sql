@@ -1,4 +1,4 @@
 BEGIN
-call func1();
+call func2();
 end;
 /
