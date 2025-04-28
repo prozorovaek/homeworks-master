@@ -1,14 +1,13 @@
 /*
 Автор: Прозорова Эльвира
 Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
-
 */
 ---- Пример 1: Создание платежа
 DECLARE
-  c_status        NUMBER(10) := 0;
+  c_status        payment.status%TYPE := 0;
   l_msg           VARCHAR2(50) := 'Платеж создан. ';
   v_current_dtime TIMESTAMP := systimestamp;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.payment_id%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -21,11 +20,11 @@ END;
 
 ---- Пример 2: Сброс платежа в "ошибочный статус" с указанием причины
 DECLARE
-  c_status        NUMBER(10) := 2;
-  v_reason        VARCHAR2(200 CHAR) := 'недостаточно средств';
+  c_status        payment.status%TYPE := 2;
+  v_reason        payment.status_change_reason%TYPE := 'недостаточно средств';
   l_msg           VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.status%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -44,11 +43,11 @@ END;
 
 ---- Пример 3: Отмена платежа из-за ошибки пользователя
 DECLARE
-  c_status        NUMBER(10) := 3;
+  c_status        payment.status%TYPE := 3;
   v_reason        VARCHAR2(200 CHAR) := 'ошибка пользователя';
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.status%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -62,10 +61,10 @@ END;
 
 ---- Пример 4: Успешное завершение платежа
 DECLARE
-  c_status        NUMBER(10) := 1;
+  c_status        payment.status%TYPE := 1;
   l_msg           VARCHAR2(100) := 'Успешное завершение платежа.';
   v_current_dtime TIMESTAMP := systimestamp;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.status%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -80,7 +79,7 @@ END;
 DECLARE
   l_msg           VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
   v_current_dtime DATE := SYSDATE;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.status%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -95,7 +94,7 @@ END;
 DECLARE
   l_msg           VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
   v_current_dtime DATE := SYSDATE;
-  v_payment_id    NUMBER(38) := 1;
+  v_payment_id    payment.status%TYPE := 1;
 BEGIN
   IF v_payment_id IS NULL
   THEN
