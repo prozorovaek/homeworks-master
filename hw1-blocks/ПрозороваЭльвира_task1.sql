@@ -5,73 +5,77 @@
 */
 ---- Пример 1: Создание платежа
 DECLARE
-  c_status        NUMBER(10) := 0;
+  c_status_0      NUMBER(10) := 0;
   l_msg           VARCHAR2(50) := 'Платеж создан. ';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    NUMBER(38) := 1;
 BEGIN
+
   IF v_payment_id IS NULL
   THEN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
-  dbms_output.put_line(l_msg || 'Статус: ' || c_status || '. ID: ' || v_payment_id);
+  dbms_output.put_line(l_msg || 'Статус: ' || c_status_0 || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
 ---- Пример 2: Сброс платежа в "ошибочный статус" с указанием причины
 DECLARE
-  c_status        NUMBER(10) := 2;
+  c_status_2      NUMBER(10) := 2;
   v_reason        VARCHAR2(200 CHAR) := 'недостаточно средств';
   l_msg           VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    NUMBER(38) := 1;
 BEGIN
+
   IF v_payment_id IS NULL
   THEN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
-  
-    IF v_reason IS NULL
+
+  IF v_reason IS NULL
   THEN
     dbms_output.put_line('Причина не может быть пустой');
   END IF;
-  
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
+
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
 ---- Пример 3: Отмена платежа из-за ошибки пользователя
 DECLARE
-  c_status        NUMBER(10) := 3;
+  c_status_3      NUMBER(10) := 3;
   v_reason        VARCHAR2(200 CHAR) := 'ошибка пользователя';
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    NUMBER(38) := 1;
 BEGIN
+
   IF v_payment_id IS NULL
   THEN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
-  
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
+
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_3 || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
 ---- Пример 4: Успешное завершение платежа
 DECLARE
-  c_status        NUMBER(10) := 1;
+  c_status_1      NUMBER(10) := 1;
   l_msg           VARCHAR2(100) := 'Успешное завершение платежа.';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    NUMBER(38) := 1;
 BEGIN
+
   IF v_payment_id IS NULL
   THEN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. ID: ' || v_payment_id);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_1 || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
@@ -101,7 +105,7 @@ BEGIN
   THEN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
-  dbms_output.put_line('Детали платежа удалены по списку id_полей' || '. ID: ' || v_payment_id);
+  dbms_output.put_line(l_msg || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
 END;
 /
