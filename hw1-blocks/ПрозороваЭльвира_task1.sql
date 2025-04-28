@@ -8,40 +8,39 @@
 */
 ---- Пример 1: Создание платежа
 DECLARE
-  c_status NUMBER := 0;
-  l_msg    VARCHAR2(50) := 'Платеж создан. ';
+  c_status_0 NUMBER := 0;
+  l_msg      VARCHAR2(50) := 'Платеж создан. ';
 BEGIN
-  dbms_output.put_line(l_msg || 'Статус: ' || c_status);
+  dbms_output.put_line(l_msg || 'Статус: ' || c_status_0);
 END;
 /
 
 ---- Пример 2: Сброс платежа в "ошибочный статус" с указанием причины
 DECLARE
-  c_status NUMBER := 2;
-  v_reason VARCHAR2(50) := 'недостаточно средств';
-  l_msg    VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
+  c_status_2 NUMBER := 2;
+  v_reason   VARCHAR2(50) := 'недостаточно средств';
+  l_msg      VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason
-  );
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason);
 END;
 /
 
 ---- Пример 3: Отмена платежа из-за ошибки пользователя
 DECLARE
-  c_status NUMBER := 3;
-  v_reason VARCHAR2(50) := 'ошибка пользователя';
-  l_msg VARCHAR2(100) := 'Отмена платежа с указанием причины.';
+  c_status_3 NUMBER := 3;
+  v_reason   VARCHAR2(50) := 'ошибка пользователя';
+  l_msg      VARCHAR2(100) := 'Отмена платежа с указанием причины.';
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_3 || '. Причина: ' || v_reason);
 END;
 /
 
 ---- Пример 4: Успешное завершение платежа
 DECLARE
-  c_status NUMBER := 1;
-  l_msg    VARCHAR2(100) := 'Успешное завершение платежа.';
+  c_status_1 NUMBER := 1;
+  l_msg      VARCHAR2(100) := 'Успешное завершение платежа.';
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_1);
 END;
 /
 
@@ -57,6 +56,6 @@ END;
 DECLARE
   l_msg VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
 BEGIN
-  dbms_output.put_line('Детали платежа удалены по списку id_полей');
+  dbms_output.put_line(l_msg);
 END;
 /
