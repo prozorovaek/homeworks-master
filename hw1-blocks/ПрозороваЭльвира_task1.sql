@@ -9,9 +9,9 @@
 ---- Пример 1: Создание платежа
 DECLARE
   c_status NUMBER := 0;
-  l_msg    VARCHAR2(50) := 'Платеж создан. Статус: ';
+  l_msg    VARCHAR2(50) := 'Платеж создан. ';
 BEGIN
-  dbms_output.put_line(l_msg || c_status);
+  dbms_output.put_line(l_msg || 'Статус: ' || c_status);
 END;
 /
 
@@ -19,8 +19,10 @@ END;
 DECLARE
   c_status NUMBER := 2;
   v_reason VARCHAR2(50) := 'недостаточно средств';
+  l_msg    VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
 BEGIN
-  dbms_output.put_line('Сброс платежа в "ошибочный статус" с указанием причины. Статус: ' || c_status || '. Причина: ' || v_reason);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason
+  );
 END;
 /
 
@@ -28,18 +30,18 @@ END;
 DECLARE
   c_status NUMBER := 3;
   v_reason VARCHAR2(50) := 'ошибка пользователя';
-  l_result NUMBER;
+  l_msg VARCHAR2(100) := 'Отмена платежа с указанием причины.';
 BEGIN
-  dbms_output.put_line('Отмена платежа с указанием причины. Статус: ' || c_status || '. Причина: ' || v_reason);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status || '. Причина: ' || v_reason);
 END;
 /
 
 ---- Пример 4: Успешное завершение платежа
 DECLARE
   c_status NUMBER := 1;
-  l_msg    VARCHAR2(100) := 'Успешное завершение платежа. Статус: ';
+  l_msg    VARCHAR2(100) := 'Успешное завершение платежа.';
 BEGIN
-  dbms_output.put_line(l_msg || c_status);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status);
 END;
 /
 
