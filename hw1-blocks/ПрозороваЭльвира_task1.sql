@@ -14,6 +14,7 @@ DECLARE
 BEGIN
   dbms_output.put_line(l_msg || 'Статус: ' || c_status_0);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+
 END;
 /
 
@@ -26,6 +27,7 @@ DECLARE
 BEGIN
   dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+
 END;
 /
 
