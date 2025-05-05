@@ -1,48 +1,61 @@
----- Пример 1
-BEGIN
-  dbms_output.put_line('Платеж создан. Статус: 0');
-END;
-/
+/*
+Автор: Прозорова Эльвира
+Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
 
----- Пример 2
+Не забывайте про правила именования.
+В названиях констант статусов должен отражаться смысл действия происходящего в этом блоке. Для вдохновения можно взять комментарий из поля payment.status.
+
+*/
+---- Пример 1: Создание платежа
 DECLARE
-l_status NUMBER := 2;
-l_reason VARCHAR2(50) := 'недостаточно средств';
+  c_status_0 NUMBER := 0;
+  l_msg      VARCHAR2(50) := 'Платеж создан. ';
 BEGIN
-  dbms_output.put_line('Сброс платежа в "ошибочный статус" с указанием причины. Статус: ' || l_status || '. Причина: ' || l_reason);
+  dbms_output.put_line(l_msg || 'Статус: ' || c_status_0);
 END;
 /
 
----- Пример 3
+---- Пример 2: Сброс платежа в "ошибочный статус" с указанием причины
 DECLARE
-l_status NUMBER := 3;
-l_reason VARCHAR2(50) := 'ошибка пользователя';
-l_result NUMBER;
+  c_status_2 NUMBER := 2;
+  v_reason   VARCHAR2(50) := 'недостаточно средств';
+  l_msg      VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
 BEGIN
-  dbms_output.put_line('Отмена платежа с указанием причины. Статус: ' || l_status || '. Причина: ' || l_reason);
-  l_result := 10 / 0;
-EXCEPTION
-  WHEN OTHERS THEN
-    dbms_output.put_line('Ошибка при отмене платежа: ' || SQLERRM);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason);
 END;
 /
 
----- Пример 4
+---- Пример 3: Отмена платежа из-за ошибки пользователя
 DECLARE
-l_status NUMBER := 1;
+  c_status_3 NUMBER := 3;
+  v_reason   VARCHAR2(50) := 'ошибка пользователя';
+  l_msg      VARCHAR2(100) := 'Отмена платежа с указанием причины.';
 BEGIN
-  dbms_output.put_line('Успешное завершение платежа. Статус: ' || l_status);
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_3 || '. Причина: ' || v_reason);
 END;
 /
 
----- Пример 5
+---- Пример 4: Успешное завершение платежа
+DECLARE
+  c_status_1 NUMBER := 1;
+  l_msg      VARCHAR2(100) := 'Успешное завершение платежа.';
 BEGIN
-  dbms_output.put_line('Данные платежа добавлены или обновлены по списку id_поля/значение');
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_1);
 END;
 /
 
----- Пример 6
+---- Пример 5: Добавление или обновление платежа по списку id_поля/значение
+DECLARE
+  l_msg VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
 BEGIN
-  dbms_output.put_line('Детали платежа удалены по списку id_полей');
+  dbms_output.put_line(l_msg);
+END;
+/
+
+---- Пример 6: Удаление платежа по списку id_полей
+DECLARE
+  l_msg VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
+BEGIN
+  dbms_output.put_line(l_msg);
 END;
 /
