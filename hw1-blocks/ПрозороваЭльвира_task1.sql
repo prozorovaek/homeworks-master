@@ -50,6 +50,7 @@ DECLARE
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    payment.payment_id%TYPE := 1;
+
 BEGIN
 
   IF v_payment_id IS NULL
