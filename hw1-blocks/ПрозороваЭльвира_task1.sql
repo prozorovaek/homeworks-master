@@ -1,20 +1,23 @@
 /*
 Автор: Прозорова Эльвира
 Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
-
 Не забывайте про правила именования.
 В названиях констант статусов должен отражаться смысл действия происходящего в этом блоке. Для вдохновения можно взять комментарий из поля payment.status.
-
 */
 ---- Пример 1: Создание платежа
 DECLARE
   c_status_0      NUMBER(10) := 0;
   l_msg           VARCHAR2(50) := 'Платеж создан. ';
   v_current_dtime TIMESTAMP := systimestamp;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg || 'Статус: ' || c_status_0);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+  dbms_output.put_line(l_msg || 'Статус: ' || c_status_0 || '. ID: ' || v_payment_id);
+  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
@@ -24,10 +27,21 @@ DECLARE
   v_reason        VARCHAR2(200 CHAR) := 'недостаточно средств';
   l_msg           VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+
+  IF v_reason IS NULL
+  THEN
+    dbms_output.put_line('Причина не может быть пустой');
+  END IF;
+
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_2 || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
+  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
@@ -37,8 +51,15 @@ DECLARE
   v_reason        VARCHAR2(200 CHAR) := 'ошибка пользователя';
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status_3 || '. Причина: ' || v_reason);
+
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_3 || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
@@ -48,18 +69,29 @@ DECLARE
   c_status_1      NUMBER(10) := 1;
   l_msg           VARCHAR2(100) := 'Успешное завершение платежа.';
   v_current_dtime TIMESTAMP := systimestamp;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg || ' Статус: ' || c_status_1);
+
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+  dbms_output.put_line(l_msg || ' Статус: ' || c_status_1 || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
 /
 
 ---- Пример 5: Добавление или обновление платежа по списку id_поля/значение
 DECLARE
-  l_msg VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
-  v_current_dtime DATE := sysdate;
+  l_msg           VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
+  v_current_dtime DATE := SYSDATE;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg);
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+  dbms_output.put_line(l_msg || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
 END;
 /
@@ -68,8 +100,13 @@ END;
 DECLARE
   l_msg           VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
   v_current_dtime DATE := SYSDATE;
+  v_payment_id    NUMBER(38) := 1;
 BEGIN
-  dbms_output.put_line(l_msg);
+  IF v_payment_id IS NULL
+  THEN
+    dbms_output.put_line('ID объекта не может быть пустым');
+  END IF;
+  dbms_output.put_line(l_msg || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
 END;
 /
