@@ -1,13 +1,18 @@
-/*
+/*﻿
 Автор: Прозорова Эльвира
 Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
 */
 ---- Пример 1: Создание платежа
 DECLARE
-  c_status_0      payment.status%TYPE := 0;
-  l_msg           VARCHAR2(50) := 'Платеж создан. ';
-  v_current_dtime TIMESTAMP := systimestamp;
-  v_payment_id    payment.payment_id%TYPE := 1;
+  c_status_0       payment.status%TYPE := 0;
+  l_msg            VARCHAR2(50) := 'Платеж создан. ';
+  v_current_dtime  TIMESTAMP := systimestamp;
+  v_payment_id     payment.payment_id%TYPE := 1;
+  v_payment_detail t_payment_detail_array := t_payment_detail_array(t_payment_detail(1, 'MobileApp')
+                                                                   ,t_payment_detail(2
+                                                                                    ,'95.165.24.178')
+                                                                   ,t_payment_detail(3
+                                                                                    ,'Платеж через браузер Chrome'));
 BEGIN
 
   IF v_payment_id IS NULL
@@ -82,9 +87,13 @@ END;
 
 ---- Пример 5: Добавление или обновление платежа по списку id_поля/значение
 DECLARE
-  l_msg           VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
-  v_current_dtime DATE := SYSDATE;
-  v_payment_id    payment.payment_id%TYPE := 1;
+  l_msg            VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
+  v_current_dtime  DATE := SYSDATE;
+  v_payment_id     payment.payment_id%TYPE := 1;
+  v_payment_detail t_payment_detail_array := t_payment_detail_array(t_payment_detail(2
+                                                                                    ,'178.234.89.201')
+                                                                   ,t_payment_detail(4
+                                                                                    ,'Проверен 2024-03-15T14:22:41, риск 0.02%'));
 BEGIN
   IF v_payment_id IS NULL
   THEN
@@ -97,9 +106,10 @@ END;
 
 ---- Пример 6: Удаление платежа по списку id_полей
 DECLARE
-  l_msg           VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
-  v_current_dtime DATE := SYSDATE;
-  v_payment_id    payment.payment_id%TYPE := 1;
+  l_msg              VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
+  v_current_dtime    DATE := SYSDATE;
+  v_payment_id       payment.payment_id%TYPE := 1;
+  v_delete_field_ids t_number_array := t_number_array(2, 3);
 BEGIN
   IF v_payment_id IS NULL
   THEN
