@@ -15,10 +15,26 @@ DECLARE
                                                                                     ,'Платеж через браузер Chrome'));
 BEGIN
 
-  IF v_payment_id IS NULL
+  IF v_payment_detail IS NOT empty
   THEN
-    dbms_output.put_line('ID объекта не может быть пустым');
+    FOR i IN v_payment_detail.first .. v_payment_detail.last
+    LOOP
+      IF (v_payment_detail(i).field_id IS NULL)
+      THEN
+        dbms_output.put_line('ID поля не может быть пустым');
+      END IF;
+    
+      IF (v_payment_detail(i).field_value IS NULL)
+      THEN
+        dbms_output.put_line('Значение в поле не может быть пустым');
+      END IF;
+    
+      dbms_output.put_line('ID: ' || v_payment_detail(i).field_id || '. Value: ' || v_payment_detail(i).field_value);
+    END LOOP;
+  ELSE
+    dbms_output.put_line('Коллекция не содержит данных');
   END IF;
+
   dbms_output.put_line(l_msg || 'Статус: ' || c_status_0 || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 END;
@@ -95,10 +111,27 @@ DECLARE
                                                                    ,t_payment_detail(4
                                                                                     ,'Проверен 2024-03-15T14:22:41, риск 0.02%'));
 BEGIN
-  IF v_payment_id IS NULL
+
+  IF v_payment_detail IS NOT empty
   THEN
-    dbms_output.put_line('ID объекта не может быть пустым');
+    FOR i IN v_payment_detail.first .. v_payment_detail.last
+    LOOP
+      IF (v_payment_detail(i).field_id IS NULL)
+      THEN
+        dbms_output.put_line('ID поля не может быть пустым');
+      END IF;
+    
+      IF (v_payment_detail(i).field_value IS NULL)
+      THEN
+        dbms_output.put_line('Значение в поле не может быть пустым');
+      END IF;
+    
+      dbms_output.put_line('ID: ' || v_payment_detail(i).field_id || '. Value: ' || v_payment_detail(i).field_value);
+    END LOOP;
+  ELSE
+    dbms_output.put_line('Коллекция не содержит данных');
   END IF;
+
   dbms_output.put_line(l_msg || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
 END;
@@ -111,11 +144,14 @@ DECLARE
   v_payment_id       payment.payment_id%TYPE := 1;
   v_delete_field_ids t_number_array := t_number_array(2, 3);
 BEGIN
-  IF v_payment_id IS NULL
+
+  IF v_delete_field_ids IS NOT empty
   THEN
-    dbms_output.put_line('ID объекта не может быть пустым');
+    dbms_output.put_line('Коллекция не содержит данных');
   END IF;
+
   dbms_output.put_line(l_msg || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
+  dbms_output.put_line('Количесвто удаленных полей: ' || v_delete_field_ids.count());
 END;
 /
