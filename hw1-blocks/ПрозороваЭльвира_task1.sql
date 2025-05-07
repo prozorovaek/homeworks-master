@@ -4,7 +4,7 @@
 */
 ---- Пример 1: Создание платежа
 DECLARE
-  c_status_0       payment.status%TYPE := 0;
+  c_status_0       payment.status%TYPE;
   l_msg            VARCHAR2(50) := 'Платеж создан. ';
   v_current_dtime  TIMESTAMP := systimestamp;
   v_payment_id     payment.payment_id%TYPE := 1;
@@ -66,7 +66,7 @@ END;
 
 ---- Пример 2: Сброс платежа в "ошибочный статус" с указанием причины
 DECLARE
-  c_status_2      payment.status%TYPE := 2;
+  c_status_2      payment.status%TYPE;
   v_reason        payment.status_change_reason%TYPE := 'недостаточно средств';
   l_msg           VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
@@ -104,7 +104,7 @@ END;
 
 ---- Пример 3: Отмена платежа из-за ошибки пользователя
 DECLARE
-  c_status_3      payment.status%TYPE := 3;
+  c_status_3      payment.status%TYPE;
   v_reason        payment.status_change_reason%TYPE := 'ошибка пользователя';
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
   v_current_dtime TIMESTAMP := systimestamp;
@@ -131,7 +131,7 @@ END;
 
 ---- Пример 4: Успешное завершение платежа
 DECLARE
-  c_status_1      payment.status%TYPE := 1;
+  c_status_1      payment.status%TYPE;
   l_msg           VARCHAR2(100) := 'Успешное завершение платежа.';
   v_current_dtime TIMESTAMP := systimestamp;
   v_payment_id    payment.payment_id%TYPE := 1;
