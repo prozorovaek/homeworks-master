@@ -93,7 +93,7 @@ BEGIN
 
   -- Обновление платежа
   UPDATE payment p
-     SET p.status               = c_status_2
+     SET p.status               = c_error
         ,p.status_change_reason = v_reason
    WHERE p.payment_id = v_payment_id
      AND p.status = 0;
@@ -121,7 +121,7 @@ BEGIN
   
     -- Обновление платежа
   UPDATE payment p
-     SET p.status               = c_status_3
+     SET p.status               = c_cancel
         ,p.status_change_reason = v_reason
    WHERE p.payment_id = v_payment_id
      AND p.status = 0;
@@ -145,7 +145,7 @@ BEGIN
 
   -- Обновление платежа
   UPDATE payment p
-     SET p.status = c_status_1
+     SET p.status = c_success
    WHERE p.payment_id = v_payment_id
      AND p.status = 0;
 END;
