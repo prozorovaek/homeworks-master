@@ -17,6 +17,7 @@ DECLARE
   v_currency_id    NUMBER(3) := 643;
   v_from_client_id NUMBER(30) := 1;
   v_to_client_id   NUMBER(30) := 4;
+
 BEGIN
 
   IF v_payment_detail IS NOT empty
@@ -85,11 +86,6 @@ BEGIN
 
   dbms_output.put_line(l_msg || ' Статус: ' || c_error || '. Причина: ' || v_reason || '. ID: ' || v_payment_id);
   dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
-
-  /*  
-    2) В блоках сброс, отмена, успешное проведение платежа добавьте UPDATE таблицы payment.
-  Используйте соответствующие константы статусов и “причину” (если есть) для обновлений.
-  Обновление возможно только, если статус у платежа “0” - “создан”.*/
 
   -- Обновление платежа
   UPDATE payment p
