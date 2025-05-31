@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION create_payment
 ) RETURN payment.payment_id%TYPE IS
   c_created CONSTANT payment.status%TYPE := 0;
   l_msg           VARCHAR2(50) := 'Платеж создан. ';
-  v_current_dtime TIMESTAMP := systimestamp;
+  p_create_dtime TIMESTAMP := systimestamp;
   v_payment_id    payment.payment_id%TYPE;
 BEGIN
   IF p_payment_detail IS NOT empty
@@ -38,13 +38,13 @@ BEGIN
   END IF;
 
   dbms_output.put_line(l_msg || 'Статус: ' || c_created);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
   -- Создание платежа
   INSERT INTO payment
     (payment_id, create_dtime, summa, currency_id, from_client_id, to_client_id)
   VALUES
-    (payment_seq.nextval, v_current_dtime, p_summa, p_currency_id, p_from_client_id, p_to_client_id)
+    (payment_seq.nextval, p_create_dtime, p_summa, p_currency_id, p_from_client_id, p_to_client_id)
   RETURNING payment_id INTO v_payment_id;
 
   dbms_output.put_line('Payment_id of new payment: ' || v_payment_id);
@@ -69,7 +69,7 @@ CREATE OR REPLACE PROCEDURE fail_payment
 ) IS
   c_error CONSTANT payment.status%TYPE := 2;
   l_msg           VARCHAR2(100) := 'Сброс платежа в "ошибочный статус" с указанием причины.';
-  v_current_dtime TIMESTAMP := systimestamp;
+  p_create_dtime TIMESTAMP := systimestamp;
 
 BEGIN
 
@@ -85,7 +85,7 @@ BEGIN
 
   dbms_output.put_line(l_msg || ' Статус: ' || c_error || '. Причина: ' || p_reason || '. ID: ' ||
                        p_payment_id);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
   -- Обновление платежа
   UPDATE payment p
@@ -105,7 +105,7 @@ CREATE OR REPLACE PROCEDURE cancel_payment
 ) IS
   c_cancel CONSTANT payment.status%TYPE := 3;
   l_msg           VARCHAR2(100) := 'Отмена платежа с указанием причины.';
-  v_current_dtime TIMESTAMP := systimestamp;
+  p_create_dtime TIMESTAMP := systimestamp;
 
 BEGIN
 
@@ -116,7 +116,7 @@ BEGIN
 
   dbms_output.put_line(l_msg || ' Статус: ' || c_cancel || '. Причина: ' || p_reason || '. ID: ' ||
                        p_payment_id);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
   -- Обновление платежа
   UPDATE payment p
@@ -131,7 +131,7 @@ END;
 CREATE OR REPLACE PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE) IS
   c_success CONSTANT payment.status%TYPE := 1;
   l_msg           VARCHAR2(100) := 'Успешное завершение платежа.';
-  v_current_dtime TIMESTAMP := systimestamp;
+  p_create_dtime TIMESTAMP := systimestamp;
 BEGIN
 
   IF p_payment_id IS NULL
@@ -139,7 +139,7 @@ BEGIN
     dbms_output.put_line('ID объекта не может быть пустым');
   END IF;
   dbms_output.put_line(l_msg || ' Статус: ' || c_success || '. ID: ' || p_payment_id);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
 
   -- Обновление платежа
   UPDATE payment p
@@ -157,7 +157,7 @@ CREATE OR REPLACE PROCEDURE insert_or_update_payment_detail
  ,p_payment_detail t_payment_detail_array
 ) IS
   l_msg           VARCHAR2(200) := 'Данные платежа добавлены или обновлены по списку id_поля/значение';
-  v_current_dtime DATE := SYSDATE;
+  p_create_dtime DATE := SYSDATE;
 
 BEGIN
 
@@ -182,7 +182,7 @@ BEGIN
   END IF;
 
   dbms_output.put_line(l_msg || '. ID: ' || p_payment_id);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss'));
 
   -- вставка и обновление данных
   MERGE INTO payment_detail p
@@ -205,7 +205,7 @@ CREATE OR REPLACE PROCEDURE delete_payment_detail
  ,p_delete_field_ids t_number_array
 ) IS
   l_msg           VARCHAR2(100) := 'Детали платежа удалены по списку id_полей';
-  v_current_dtime DATE := SYSDATE;
+  p_create_dtime DATE := SYSDATE;
 
 BEGIN
 
@@ -215,7 +215,7 @@ BEGIN
   END IF;
 
   dbms_output.put_line(l_msg || '. ID: ' || p_payment_id);
-  dbms_output.put_line(to_char(v_current_dtime, 'dd.mm.yyyy hh24:mi:ss'));
+  dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss'));
   dbms_output.put_line('Количесвто удаленных полей: ' || p_delete_field_ids.count());
 
   DELETE payment_detail d
