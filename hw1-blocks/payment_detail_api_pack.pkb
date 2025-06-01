@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
 
   PROCEDURE insert_or_update_payment_detail
   (
@@ -14,11 +14,11 @@ CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
       LOOP
         IF p_payment_detail(i).field_id IS NULL
         THEN
-          dbms_output.put_line(c_msg_id_field_empty);
+          raise_application_error(c_error_code_invalid_input_parameter, c_msg_id_field_empty);
         END IF;
         IF p_payment_detail(i).field_value IS NULL
         THEN
-          dbms_output.put_line(c_msg_value_not_empty);
+          raise_application_error(c_error_code_invalid_input_parameter, c_msg_value_not_empty);
         END IF;
         dbms_output.put_line('ID: ' || p_payment_detail(i).field_id || '. Value: ' || p_payment_detail(i).field_value);
       END LOOP;
@@ -51,7 +51,7 @@ CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
   BEGIN
     IF p_delete_field_ids IS empty
     THEN
-      dbms_output.put_line(c_msg_collection_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_collection_empty);
     END IF;
   
     dbms_output.put_line(l_msg || '. ID: ' || p_payment_id);

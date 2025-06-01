@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
+﻿CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
 
   FUNCTION create_payment
   (
@@ -18,16 +18,16 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
       LOOP
         IF p_payment_detail(i).field_id IS NULL
         THEN
-          dbms_output.put_line(c_msg_id_field_empty);
+          raise_application_error(c_error_code_invalid_input_parameter, c_msg_id_field_empty);
         END IF;
         IF p_payment_detail(i).field_value IS NULL
         THEN
-          dbms_output.put_line(c_msg_value_not_empty);
+          raise_application_error(c_error_code_invalid_input_parameter, c_msg_value_not_empty);
         END IF;
         dbms_output.put_line('ID: ' || p_payment_detail(i).field_id || '. Value: ' || p_payment_detail(i).field_value);
       END LOOP;
     ELSE
-      dbms_output.put_line(c_msg_collection_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_collection_empty);
     END IF;
   
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_created);
@@ -59,11 +59,11 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   BEGIN
     IF p_payment_id IS NULL
     THEN
-      dbms_output.put_line(c_msg_id_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_id_empty);
     END IF;
     IF p_reason IS NULL
     THEN
-      dbms_output.put_line(c_msg_reason_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_reason_empty);
     END IF;
   
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_error || '. Причина: ' || p_reason ||
@@ -87,7 +87,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   BEGIN
     IF p_payment_id IS NULL
     THEN
-      dbms_output.put_line(c_msg_id_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_id_empty);
     END IF;
   
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_cancel || '. Причина: ' || p_reason ||
@@ -107,7 +107,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   BEGIN
     IF p_payment_id IS NULL
     THEN
-      dbms_output.put_line(c_msg_id_empty);
+      raise_application_error(c_error_code_invalid_input_parameter, c_msg_id_empty);
     END IF;
   
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_success || '. ID: ' || p_payment_id);
