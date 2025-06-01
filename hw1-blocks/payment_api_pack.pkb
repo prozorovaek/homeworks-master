@@ -1,4 +1,16 @@
 ﻿CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
+  g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
+
+  --разрешение менять данные
+  PROCEDURE allow_changes IS
+  BEGIN
+    g_is_api := TRUE;
+  END;
+  --запрет менять данные
+  PROCEDURE disallow_changes IS
+  BEGIN
+    g_is_api := FALSE;
+  END;
 
   FUNCTION create_payment
   (
@@ -33,20 +45,24 @@
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_created);
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
   
+    allow_changes();
+  
     INSERT INTO payment
       (payment_id, create_dtime, summa, currency_id, from_client_id, to_client_id)
     VALUES
       (payment_seq.nextval, p_create_dtime, p_summa, p_currency_id, p_from_client_id, p_to_client_id)
     RETURNING payment_id INTO v_payment_id;
   
-    INSERT INTO payment_detail
-      (payment_id, field_id, field_value)
-      SELECT v_payment_id
-            ,VALUE       (t).field_id
-            ,VALUE       (t).field_value
-        FROM TABLE(p_payment_detail) t;
+    payment_detail_api_pack.insert_or_update_payment_detail(p_payment_id     => v_payment_id
+                                                           ,p_payment_detail => p_payment_detail);
+  
+    disallow_changes();
   
     RETURN v_payment_id;
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
   END;
 
   PROCEDURE fail_payment
@@ -66,6 +82,8 @@
       raise_application_error(c_error_code_invalid_input_parameter, c_msg_reason_empty);
     END IF;
   
+    allow_changes();
+  
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_error || '. Причина: ' || p_reason ||
                          '. ID: ' || p_payment_id);
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
@@ -75,6 +93,13 @@
           ,status_change_reason = p_reason
      WHERE payment_id = p_payment_id
        AND status = c_status_created;
+  
+    disallow_changes();
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
   END;
 
   PROCEDURE cancel_payment
@@ -94,11 +119,20 @@
                          '. ID: ' || p_payment_id);
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
   
+    allow_changes();
+  
     UPDATE payment
        SET status               = c_status_cancel
           ,status_change_reason = p_reason
      WHERE payment_id = p_payment_id
        AND status = c_status_created;
+  
+    disallow_changes();
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
   END;
 
   PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE) IS
@@ -113,11 +147,29 @@
     dbms_output.put_line(l_msg || ' Статус: ' || c_status_success || '. ID: ' || p_payment_id);
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
   
+    allow_changes();
+  
     UPDATE payment
        SET status               = c_status_success
           ,status_change_reason = l_msg
      WHERE payment_id = p_payment_id
        AND status = c_status_created;
+    disallow_changes();
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
+    
+  END;
+
+  PROCEDURE is_changes_through_api IS
+  BEGIN
+    IF NOT g_is_api
+    THEN
+      raise_application_error(c_error_code_manual_changes, c_msg_manual_changes);
+    END IF;
+  
   END;
 
 END payment_api_pack;

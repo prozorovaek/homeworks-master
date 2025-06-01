@@ -1,4 +1,16 @@
 ﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+  g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
+
+  --разрешение менять данные
+  PROCEDURE allow_changes IS
+  BEGIN
+    g_is_api := TRUE;
+  END;
+  --запрет менять данные
+  PROCEDURE disallow_changes IS
+  BEGIN
+    g_is_api := FALSE;
+  END;
 
   PROCEDURE insert_or_update_payment_detail
   (
@@ -29,6 +41,8 @@
     dbms_output.put_line(l_msg || '. ID: ' || p_payment_id);
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss'));
   
+    allow_changes();
+  
     MERGE INTO payment_detail p
     USING (SELECT p_payment_id payment_id
                  ,VALUE       (t).field_id        field_id
@@ -39,6 +53,14 @@
       UPDATE SET p.field_value = n.field_value
     WHEN NOT MATCHED THEN
       INSERT (payment_id, field_id, field_value) VALUES (n.payment_id, n.field_id, n.field_value);
+  
+    disallow_changes();
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
+    
   END;
 
   PROCEDURE delete_payment_detail
@@ -58,10 +80,27 @@
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss'));
     dbms_output.put_line('Количество удаленных полей: ' || p_delete_field_ids.count);
   
+    allow_changes();
+  
     DELETE FROM payment_detail
      WHERE payment_id = p_payment_id
        AND field_id IN (SELECT VALUE(t) FROM TABLE(p_delete_field_ids) t);
+  
+    disallow_changes();
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+      disallow_changes();
+      RAISE;
   END;
 
+  PROCEDURE is_changes_through_api IS
+  BEGIN
+    IF NOT g_is_api
+    THEN
+      raise_application_error(c_error_code_manual_changes, c_msg_manual_changes);
+    END IF;
+  
+  END;
 END payment_detail_api_pack;
 /
