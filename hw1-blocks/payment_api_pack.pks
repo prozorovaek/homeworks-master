@@ -5,6 +5,12 @@
   Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
   */
 
+  -- Статусы платежа
+  c_status_created CONSTANT payment.status%TYPE := 0;
+  c_status_success CONSTANT payment.status%TYPE := 1;
+  c_status_error   CONSTANT payment.status%TYPE := 2;
+  c_status_cancel  CONSTANT payment.status%TYPE := 3;
+
   -- Создание платежа
   FUNCTION create_payment
   (
@@ -31,6 +37,9 @@
 
   -- Успешное завершение платежа
   PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE);
+
+  --Блокировка клиента для изменения
+  PROCEDURE try_lock_payment(p_payment_id payment.payment_id%TYPE);
 
   --Триггеры
 

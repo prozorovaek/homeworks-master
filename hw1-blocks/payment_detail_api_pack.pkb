@@ -38,6 +38,8 @@
                              ,common_pack.c_msg_value_not_empty);
     END IF;
   
+    payment_api_pack.try_lock_payment(p_payment_id); -- блокируем клиента
+  
     allow_changes();
   
     MERGE INTO payment_detail p
@@ -71,6 +73,8 @@
       raise_application_error(common_pack.c_error_code_invalid_input_parameter
                              ,common_pack.c_msg_collection_empty);
     END IF;
+  
+    payment_api_pack.try_lock_payment(p_payment_id); -- блокируем клиента  
   
     allow_changes();
   
