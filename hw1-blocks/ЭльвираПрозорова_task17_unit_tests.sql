@@ -1,13 +1,13 @@
- --Заготовка для unit-тестов 
+ --Р—Р°РіРѕС‚РѕРІРєР° РґР»СЏ unit-С‚РµСЃС‚РѕРІ 
 
- --Проверка "Создание платежа"
+ --РџСЂРѕРІРµСЂРєР° "РЎРѕР·РґР°РЅРёРµ РїР»Р°С‚РµР¶Р°"
    
 DECLARE
   v_payment_detail    t_payment_detail_array := t_payment_detail_array(t_payment_detail(1, 'MobileApp')
                                                                       ,t_payment_detail(2
                                                                                        ,'95.165.24.178')
                                                                       ,t_payment_detail(3
-                                                                                       ,'Платеж через браузер Chrome'));
+                                                                                       ,'РџР»Р°С‚РµР¶ С‡РµСЂРµР· Р±СЂР°СѓР·РµСЂ Chrome'));
   v_payment_id        payment.payment_id%TYPE;
   v_create_dtime_tech payment.create_dtime_tech%TYPE;
   v_update_dtime_tech payment.update_dtime_tech%TYPE;
@@ -28,7 +28,7 @@ BEGIN
 
   IF v_create_dtime_tech != v_update_dtime_tech
   THEN
-    raise_application_error(-20999, 'Технические даты разные');
+    raise_application_error(-20999, 'РўРµС…РЅРёС‡РµСЃРєРёРµ РґР°С‚С‹ СЂР°Р·РЅС‹Рµ');
   END IF;
 
   COMMIT;
@@ -39,9 +39,9 @@ SELECT * FROM payment a WHERE a.payment_id = 85;
 SELECT * FROM payment_detail a WHERE a.payment_id =44 ORDER BY a.field_id;
 
 
---Проверка "Сброс платежа в "ошибочный статус" с указанием причины"
+--РџСЂРѕРІРµСЂРєР° "РЎР±СЂРѕСЃ РїР»Р°С‚РµР¶Р° РІ "РѕС€РёР±РѕС‡РЅС‹Р№ СЃС‚Р°С‚СѓСЃ" СЃ СѓРєР°Р·Р°РЅРёРµРј РїСЂРёС‡РёРЅС‹"
 DECLARE
-  v_reason            payment.status_change_reason%TYPE := 'Недостаточно средств на счете';
+  v_reason            payment.status_change_reason%TYPE := 'РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃСЂРµРґСЃС‚РІ РЅР° СЃС‡РµС‚Рµ';
   v_payment_id        payment.payment_id%TYPE := 85;
   v_create_dtime_tech payment.create_dtime_tech%TYPE;
   v_update_dtime_tech payment.update_dtime_tech%TYPE;
@@ -57,7 +57,7 @@ BEGIN
 
   IF v_create_dtime_tech = v_update_dtime_tech
   THEN
-    raise_application_error(-20999, 'Технические даты разные');
+    raise_application_error(-20999, 'РўРµС…РЅРёС‡РµСЃРєРёРµ РґР°С‚С‹ СЂР°Р·РЅС‹Рµ');
   END IF;
   COMMIT;
 END;
@@ -66,20 +66,20 @@ SELECT * FROM payment a WHERE a.payment_id = 85;
 SELECT * FROM payment_detail a WHERE a.payment_id =44 ORDER BY a.field_id;
 
 
---Проверка запрета удаления платежа через delete
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° СѓРґР°Р»РµРЅРёСЏ РїР»Р°С‚РµР¶Р° С‡РµСЂРµР· delete
 DECLARE
   v_payment_id payment.payment_id%TYPE := 85;
 BEGIN
   DELETE payment a WHERE a.payment_id = v_payment_id;
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_delete_forbidden THEN
-    dbms_output.put_line('Удаление платежа. Исключение возбуждено успешно. Ошибка: ' || SQLERRM);
+    dbms_output.put_line('РЈРґР°Р»РµРЅРёРµ РїР»Р°С‚РµР¶Р°. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' || SQLERRM);
 END;
 /
 
---Проверка функционала по глобальному отключению проверок. Оперция удаления платежа
+--РџСЂРѕРІРµСЂРєР° С„СѓРЅРєС†РёРѕРЅР°Р»Р° РїРѕ РіР»РѕР±Р°Р»СЊРЅРѕРјСѓ РѕС‚РєР»СЋС‡РµРЅРёСЋ РїСЂРѕРІРµСЂРѕРє. РћРїРµСЂС†РёСЏ СѓРґР°Р»РµРЅРёСЏ РїР»Р°С‚РµР¶Р°
 DECLARE
   v_payment_id payment.payment_id%TYPE := -1;
 BEGIN
@@ -94,7 +94,7 @@ EXCEPTION
 END;
 /
 
---Проверка функционала по глобальному отключению проверок. Оперция обновления платежа
+--РџСЂРѕРІРµСЂРєР° С„СѓРЅРєС†РёРѕРЅР°Р»Р° РїРѕ РіР»РѕР±Р°Р»СЊРЅРѕРјСѓ РѕС‚РєР»СЋС‡РµРЅРёСЋ РїСЂРѕРІРµСЂРѕРє. РћРїРµСЂС†РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РїР»Р°С‚РµР¶Р°
 DECLARE
   v_payment_id payment.payment_id%TYPE := -1;
 BEGIN
@@ -109,7 +109,7 @@ EXCEPTION
 END;
 /
 
---Проверка функционала по глобальному отключению проверок. Оперция обновления платежа
+--РџСЂРѕРІРµСЂРєР° С„СѓРЅРєС†РёРѕРЅР°Р»Р° РїРѕ РіР»РѕР±Р°Р»СЊРЅРѕРјСѓ РѕС‚РєР»СЋС‡РµРЅРёСЋ РїСЂРѕРІРµСЂРѕРє. РћРїРµСЂС†РёСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РїР»Р°С‚РµР¶Р°
 DECLARE
   v_payment_id    payment.payment_id%TYPE := -1;
   v_payment_summa payment.summa%TYPE := 440;
@@ -128,7 +128,7 @@ EXCEPTION
 END;
 /
 
---Проверка запрета вставки платежа не через API
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° РІСЃС‚Р°РІРєРё РїР»Р°С‚РµР¶Р° РЅРµ С‡РµСЂРµР· API
 DECLARE
   v_payment_id payment.payment_id%TYPE := 85;
 BEGIN
@@ -137,26 +137,26 @@ BEGIN
   VALUES
     (v_payment_id, common_pack.c_status_success, 15000, 643, 1, 4);
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_manual_changes THEN
-    dbms_output.put_line('Вставка в таблицу client не через API. Исключение возбуждено успешно. Ошибка: ' || SQLERRM);
+    dbms_output.put_line('Р’СЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ client РЅРµ С‡РµСЂРµР· API. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' || SQLERRM);
 END;
 /
 
---Проверка запрета обновления платежа не через API
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ РїР»Р°С‚РµР¶Р° РЅРµ С‡РµСЂРµР· API
 DECLARE
   v_payment_id payment.payment_id%TYPE := 85;
 BEGIN
   UPDATE payment a SET a.status = a.status WHERE a.payment_id = v_payment_id;
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_manual_changes THEN
-    dbms_output.put_line('Обновление таблицы client не через API. Исключение возбуждено успешно. Ошибка: ' || SQLERRM);
+    dbms_output.put_line('РћР±РЅРѕРІР»РµРЅРёРµ С‚Р°Р±Р»РёС†С‹ client РЅРµ С‡РµСЂРµР· API. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' || SQLERRM);
 END;
 /
---Проверка запрета вставки платежа не через API
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° РІСЃС‚Р°РІРєРё РїР»Р°С‚РµР¶Р° РЅРµ С‡РµСЂРµР· API
 DECLARE
   v_payment_id payment_detail.payment_id%TYPE := 85;
 BEGIN
@@ -165,45 +165,45 @@ BEGIN
   VALUES
     (v_payment_id, 1, 'TestMobile');
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_manual_changes THEN
-    dbms_output.put_line('Вставка в таблицу payment_detail не через API. Исключение возбуждено успешно. Ошибка: ' ||
+    dbms_output.put_line('Р’СЃС‚Р°РІРєР° РІ С‚Р°Р±Р»РёС†Сѓ payment_detail РЅРµ С‡РµСЂРµР· API. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' ||
                          SQLERRM);
 END;
 /
 
---Проверка запрета обновления платежа не через API
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ РїР»Р°С‚РµР¶Р° РЅРµ С‡РµСЂРµР· API
 DECLARE
   v_payment_id payment_detail.payment_id%TYPE := 85;
 BEGIN
   UPDATE payment_detail a SET a.field_value = 'App' WHERE a.payment_id = v_payment_id;
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_manual_changes THEN
-    dbms_output.put_line('Обновление таблицы payment_detail не через API. Исключение возбуждено успешно. Ошибка: ' ||
+    dbms_output.put_line('РћР±РЅРѕРІР»РµРЅРёРµ С‚Р°Р±Р»РёС†С‹ payment_detail РЅРµ С‡РµСЂРµР· API. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' ||
                          SQLERRM);
 END;
 /
 
---Проверка запрета удаления платежа через delete
+--РџСЂРѕРІРµСЂРєР° Р·Р°РїСЂРµС‚Р° СѓРґР°Р»РµРЅРёСЏ РїР»Р°С‚РµР¶Р° С‡РµСЂРµР· delete
 DECLARE
   v_payment_id payment_detail.payment_id%TYPE := 85;
 BEGIN
   DELETE payment_detail a WHERE a.payment_id = v_payment_id;
 
-  raise_application_error(-20999, 'Unit-тест или API выполнены не верно');
+  raise_application_error(-20999, 'Unit-С‚РµСЃС‚ РёР»Рё API РІС‹РїРѕР»РЅРµРЅС‹ РЅРµ РІРµСЂРЅРѕ');
 EXCEPTION
   WHEN common_pack.e_manual_changes THEN
-    dbms_output.put_line('Удаление платежа таблицы payment_detail не через API. Исключение возбуждено успешно. Ошибка: ' ||
+    dbms_output.put_line('РЈРґР°Р»РµРЅРёРµ РїР»Р°С‚РµР¶Р° С‚Р°Р±Р»РёС†С‹ payment_detail РЅРµ С‡РµСЂРµР· API. РСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' ||
                          SQLERRM);
 END;
 /
 
---Проверка "Отмена платежа из-за ошибки пользователя"
+--РџСЂРѕРІРµСЂРєР° "РћС‚РјРµРЅР° РїР»Р°С‚РµР¶Р° РёР·-Р·Р° РѕС€РёР±РєРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ"
 DECLARE
-  v_reason     payment.status_change_reason%TYPE := 'Ошибка пользователя';
+  v_reason     payment.status_change_reason%TYPE := 'РћС€РёР±РєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ';
   v_payment_id payment.payment_id%TYPE := 44;
 BEGIN
   cancel_payment(p_payment_id => v_payment_id, p_reason => v_reason);
@@ -214,7 +214,7 @@ SELECT * FROM payment a WHERE a.payment_id = 44;
 SELECT * FROM payment_detail a WHERE a.payment_id = 44 ORDER BY a.field_id;
 
 
---Проверка "Успешное завершение платежа"
+--РџСЂРѕРІРµСЂРєР° "РЈСЃРїРµС€РЅРѕРµ Р·Р°РІРµСЂС€РµРЅРёРµ РїР»Р°С‚РµР¶Р°"
 DECLARE
   v_payment_id payment.payment_id%TYPE := 44;
 BEGIN
@@ -225,13 +225,13 @@ END;
 SELECT * FROM payment a WHERE a.payment_id = 44;
 SELECT * FROM payment_detail a WHERE a.payment_id = 44 ORDER BY a.field_id;
 
---Проверка "Добавление или обновление платежа по списку id_поля/значение"
+--РџСЂРѕРІРµСЂРєР° "Р”РѕР±Р°РІР»РµРЅРёРµ РёР»Рё РѕР±РЅРѕРІР»РµРЅРёРµ РїР»Р°С‚РµР¶Р° РїРѕ СЃРїРёСЃРєСѓ id_РїРѕР»СЏ/Р·РЅР°С‡РµРЅРёРµ"
 
 DECLARE
   v_payment_detail t_payment_detail_array := t_payment_detail_array(t_payment_detail(2
                                                                                     ,'178.234.89.201')
                                                                    ,t_payment_detail(4
-                                                                                    ,'Проверен 2025-05-11T14:22:44, риск 0.5%'));
+                                                                                    ,'РџСЂРѕРІРµСЂРµРЅ 2025-05-11T14:22:44, СЂРёСЃРє 0.5%'));
   v_payment_id     payment.payment_id%TYPE := 44;
 BEGIN
   insert_or_update_payment_detail(p_payment_id => v_payment_id, p_payment_detail => v_payment_detail);
@@ -240,7 +240,7 @@ END;
 /
 SELECT * FROM payment_detail a WHERE a.payment_id =44 ORDER BY a.field_id;
 
---Проверка "Удаление платежа по списку id_полей"
+--РџСЂРѕРІРµСЂРєР° "РЈРґР°Р»РµРЅРёРµ РїР»Р°С‚РµР¶Р° РїРѕ СЃРїРёСЃРєСѓ id_РїРѕР»РµР№"
 
 DECLARE
   v_delete_field_ids t_number_array := t_number_array(2, 3);
@@ -257,16 +257,16 @@ SELECT * FROM payment a WHERE a.payment_id = -1;
 SELECT * FROM payment_detail a WHERE a.payment_id = 44 ORDER BY a.field_id;
 
 
---Негативный тест на отсутствие объекта
+--РќРµРіР°С‚РёРІРЅС‹Р№ С‚РµСЃС‚ РЅР° РѕС‚СЃСѓС‚СЃС‚РІРёРµ РѕР±СЉРµРєС‚Р°
 DECLARE
   v_payment_id payment.payment_id%TYPE := -777;
-  v_reason     payment.status_change_reason%TYPE := 'Тестовая причина';
+  v_reason     payment.status_change_reason%TYPE := 'РўРµСЃС‚РѕРІР°СЏ РїСЂРёС‡РёРЅР°';
 BEGIN
   payment_api_pack.fail_payment(p_payment_id => v_payment_id, p_reason => v_reason);
 
 EXCEPTION
   WHEN common_pack.e_object_no_found THEN
-    dbms_output.put_line('Объект не найден. исключение возбуждено успешно. Ошибка: ' || SQLERRM);
+    dbms_output.put_line('РћР±СЉРµРєС‚ РЅРµ РЅР°Р№РґРµРЅ. РёСЃРєР»СЋС‡РµРЅРёРµ РІРѕР·Р±СѓР¶РґРµРЅРѕ СѓСЃРїРµС€РЅРѕ. РћС€РёР±РєР°: ' || SQLERRM);
 END;
 /
 

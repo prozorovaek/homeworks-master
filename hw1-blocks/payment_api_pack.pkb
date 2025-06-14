@@ -1,4 +1,5 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
+﻿
+CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
   --разрешение менять данные
@@ -157,15 +158,11 @@
   END;
 
   PROCEDURE try_lock_payment(p_payment_id payment.payment_id%TYPE) IS
-    v_payment_id payment.payment_id%TYPE;
+    v_status payment.status%TYPE;
   BEGIN
-    SELECT payment_id
-      INTO v_payment_id
-      FROM payment t
-     WHERE t.payment_id = p_payment_id
-       FOR UPDATE NOWAIT;
+    SELECT status INTO v_status FROM payment t WHERE t.payment_id = p_payment_id FOR UPDATE NOWAIT;
   
-    IF v_payment_id = c_status_success
+    IF v_status = c_status_success
     THEN
       raise_application_error(common_pack.c_error_code_final_status, common_pack.c_msg_final_status);
     END IF;

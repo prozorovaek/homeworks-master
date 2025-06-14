@@ -38,7 +38,7 @@
   -- Успешное завершение платежа
   PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE);
 
-  --Блокировка клиента для изменения
+  --Блокировка платежа для изменения
   PROCEDURE try_lock_payment(p_payment_id payment.payment_id%TYPE);
 
   --Триггеры
