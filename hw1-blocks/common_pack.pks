@@ -2,20 +2,20 @@ CREATE OR REPLACE PACKAGE common_pack IS
 
   -- Author  : USER
   -- Created : 10.06.2025 21:07:13
-  -- Purpose : Общие объекты
+  -- Purpose : РћР±С‰РёРµ РѕР±СЉРµРєС‚С‹
 
-  c_msg_id_empty         CONSTANT VARCHAR2(100) := 'ID объекта не может быть пустым';
-  c_msg_id_field_empty   CONSTANT VARCHAR2(100) := 'ID поля не может быть пустым';
-  c_msg_reason_empty     CONSTANT VARCHAR2(100) := 'Причина не может быть пустой';
-  c_msg_value_not_empty  CONSTANT VARCHAR2(100) := 'Значение в поле не может быть пустым';
-  c_msg_collection_empty CONSTANT VARCHAR2(100) := 'Коллекция не содержит данных';
-  c_msg_delete_forbidden CONSTANT VARCHAR2(100) := 'Удаление объекта запрещено';
-  c_msg_manual_changes   CONSTANT VARCHAR2(100) := 'Изменения должны выполняться только через API';
-  c_msg_final_status     CONSTANT VARCHAR2(100) := 'Объект в конечном статусе. Изменения невозможны';
-  c_msg_object_no_found  CONSTANT VARCHAR2(100) := 'Объект не найден';
-  c_msg_object_blocked   CONSTANT VARCHAR2(100) := 'Объект уже заблокирован';
+  c_msg_id_empty         CONSTANT VARCHAR2(100) := 'ID РѕР±СЉРµРєС‚Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј';
+  c_msg_id_field_empty   CONSTANT VARCHAR2(100) := 'ID РїРѕР»СЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј';
+  c_msg_reason_empty     CONSTANT VARCHAR2(100) := 'РџСЂРёС‡РёРЅР° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚РѕР№';
+  c_msg_value_not_empty  CONSTANT VARCHAR2(100) := 'Р—РЅР°С‡РµРЅРёРµ РІ РїРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј';
+  c_msg_collection_empty CONSTANT VARCHAR2(100) := 'РљРѕР»Р»РµРєС†РёСЏ РЅРµ СЃРѕРґРµСЂР¶РёС‚ РґР°РЅРЅС‹С…';
+  c_msg_delete_forbidden CONSTANT VARCHAR2(100) := 'РЈРґР°Р»РµРЅРёРµ РѕР±СЉРµРєС‚Р° Р·Р°РїСЂРµС‰РµРЅРѕ';
+  c_msg_manual_changes   CONSTANT VARCHAR2(100) := 'РР·РјРµРЅРµРЅРёСЏ РґРѕР»Р¶РЅС‹ РІС‹РїРѕР»РЅСЏС‚СЊСЃСЏ С‚РѕР»СЊРєРѕ С‡РµСЂРµР· API';
+  c_msg_final_status     CONSTANT VARCHAR2(100) := 'РћР±СЉРµРєС‚ РІ РєРѕРЅРµС‡РЅРѕРј СЃС‚Р°С‚СѓСЃРµ. РР·РјРµРЅРµРЅРёСЏ РЅРµРІРѕР·РјРѕР¶РЅС‹';
+  c_msg_object_no_found  CONSTANT VARCHAR2(100) := 'РћР±СЉРµРєС‚ РЅРµ РЅР°Р№РґРµРЅ';
+  c_msg_object_blocked   CONSTANT VARCHAR2(100) := 'РћР±СЉРµРєС‚ СѓР¶Рµ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ';
 
-  --Коды ошибок
+  --РљРѕРґС‹ РѕС€РёР±РѕРє
   c_error_code_invalid_input_parameter CONSTANT NUMBER(10) := -20101;
   c_error_code_delete_forbidden        CONSTANT NUMBER(10) := -20102;
   c_error_code_manual_changes          CONSTANT NUMBER(10) := -20103;
@@ -23,7 +23,7 @@ CREATE OR REPLACE PACKAGE common_pack IS
   c_error_code_object_no_found         CONSTANT NUMBER(10) := -20105;
   c_error_code_object_blocked          CONSTANT NUMBER(10) := -20106;
 
-  -- Объекты исключений
+  -- РћР±СЉРµРєС‚С‹ РёСЃРєР»СЋС‡РµРЅРёР№
   e_invalid_input_parameter EXCEPTION;
   PRAGMA EXCEPTION_INIT(e_invalid_input_parameter, c_error_code_invalid_input_parameter);
   e_delete_forbidden EXCEPTION;
@@ -39,11 +39,11 @@ CREATE OR REPLACE PACKAGE common_pack IS
   e_object_blocked EXCEPTION;
   PRAGMA EXCEPTION_INIT(e_object_blocked, c_error_code_object_blocked);
 
-  -- Включение/отключения разрешения менять вручную данные объектов
+  -- Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёСЏ СЂР°Р·СЂРµС€РµРЅРёСЏ РјРµРЅСЏС‚СЊ РІСЂСѓС‡РЅСѓСЋ РґР°РЅРЅС‹Рµ РѕР±СЉРµРєС‚РѕРІ
   PROCEDURE enable_manual_changes;
   PROCEDURE disable_manual_changes;
 
-  --Разрешены ли ручные изменения на глобальном уровне
+  --Р Р°Р·СЂРµС€РµРЅС‹ Р»Рё СЂСѓС‡РЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ РЅР° РіР»РѕР±Р°Р»СЊРЅРѕРј СѓСЂРѕРІРЅРµ
   FUNCTION is_manual_changes_allowed RETURN BOOLEAN;
 
 END common_pack;
