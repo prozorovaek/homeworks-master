@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
 
   PROCEDURE insert_or_update_payment_detail
   (

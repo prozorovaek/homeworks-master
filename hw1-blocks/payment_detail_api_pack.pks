@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE payment_detail_api_pack IS
+CREATE OR REPLACE PACKAGE payment_detail_api_pack IS
   /*﻿
   Автор: Прозорова Эльвира
   Описание скрипта: API для сущностей "Платеж" и "Детали платежа"

@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
 
   FUNCTION create_payment
   (
