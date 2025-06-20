@@ -33,7 +33,6 @@ CREATE OR REPLACE PACKAGE payment_api_pack IS
   e_manual_changes EXCEPTION;
   PRAGMA EXCEPTION_INIT(e_manual_changes, c_error_code_manual_changes);
 
-
   -- Создание платежа
   FUNCTION create_payment
   (
@@ -61,8 +60,13 @@ CREATE OR REPLACE PACKAGE payment_api_pack IS
   -- Успешное завершение платежа
   PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE);
 
+  --Триггеры
+
   --Проверка, вызываемая из триггера
   PROCEDURE is_changes_through_api;
+
+  --Проверка на возможность удалять данные
+  PROCEDURE check_client_delete_restriction;
 
 END payment_api_pack;
 /
