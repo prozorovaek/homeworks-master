@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
   --разрешение менять данные
@@ -100,6 +100,7 @@
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
+
   END;
 
   PROCEDURE cancel_payment
@@ -133,6 +134,7 @@
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
+
   END;
 
   PROCEDURE successful_finish_payment(p_payment_id payment.payment_id%TYPE) IS
@@ -148,7 +150,7 @@
     dbms_output.put_line(to_char(p_create_dtime, 'dd.mm.yyyy hh24:mi:ss.ff'));
   
     allow_changes();
-  
+
     UPDATE payment
        SET status               = c_status_success
           ,status_change_reason = l_msg

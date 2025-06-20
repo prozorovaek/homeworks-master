@@ -1,5 +1,6 @@
 ﻿CREATE OR REPLACE PACKAGE payment_detail_api_pack IS
-  /*﻿
+
+  /*
   Автор: Прозорова Эльвира
   Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
   */
@@ -32,5 +33,6 @@
 
   --Проверка, вызываемая из триггера
   PROCEDURE is_changes_through_api;
+
 END payment_detail_api_pack;
 /

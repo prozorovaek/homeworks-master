@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
   --разрешение менять данные
@@ -60,7 +60,7 @@
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
-    
+
   END;
 
   PROCEDURE delete_payment_detail
@@ -102,5 +102,11 @@
     END IF;
   
   END;
+
+    DELETE FROM payment_detail
+     WHERE payment_id = p_payment_id
+       AND field_id IN (SELECT VALUE(t) FROM TABLE(p_delete_field_ids) t);
+  END;
+
 END payment_detail_api_pack;
 /
