@@ -1,7 +1,7 @@
 CREATE OR REPLACE PACKAGE BODY common_pack IS
 
   g_enabled_manual_changes BOOLEAN := FALSE;
-  -- Включение/отключения разрешения менять вручную данные объектов
+  -- Р’РєР»СЋС‡РµРЅРёРµ/РѕС‚РєР»СЋС‡РµРЅРёСЏ СЂР°Р·СЂРµС€РµРЅРёСЏ РјРµРЅСЏС‚СЊ РІСЂСѓС‡РЅСѓСЋ РґР°РЅРЅС‹Рµ РѕР±СЉРµРєС‚РѕРІ
   PROCEDURE enable_manual_changes IS
   BEGIN
     g_enabled_manual_changes := TRUE;
@@ -12,7 +12,7 @@ CREATE OR REPLACE PACKAGE BODY common_pack IS
     g_enabled_manual_changes := FALSE;
   END;
 
-  --Разрешены ли ручные изменения на глобальном уровне
+  --Р Р°Р·СЂРµС€РµРЅС‹ Р»Рё СЂСѓС‡РЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ РЅР° РіР»РѕР±Р°Р»СЊРЅРѕРј СѓСЂРѕРІРЅРµ
   FUNCTION is_manual_changes_allowed RETURN BOOLEAN IS
   BEGIN
     RETURN g_enabled_manual_changes;

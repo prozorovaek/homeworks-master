@@ -1,3 +1,4 @@
+
 CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
@@ -22,8 +23,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   ) RETURN payment.payment_id%TYPE IS
     p_create_dtime TIMESTAMP := systimestamp;
     v_payment_id   payment.payment_id%TYPE;
-
-BEGIN
+  BEGIN
   
     allow_changes();
   
@@ -62,13 +62,15 @@ BEGIN
                              ,common_pack.c_msg_reason_empty);
     END IF;
   
+    try_lock_payment(p_payment_id); -- пытаемся заблокировать клиента
+  
     allow_changes();
   
     UPDATE payment
-       SET status               = common_pack.c_status_error
+       SET status               = c_status_error
           ,status_change_reason = p_reason
      WHERE payment_id = p_payment_id
-       AND status = common_pack.c_status_created;
+       AND status = c_status_created;
   
     disallow_changes();
   
@@ -76,7 +78,6 @@ BEGIN
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
-
   END;
 
   PROCEDURE cancel_payment
@@ -91,13 +92,15 @@ BEGIN
                              ,common_pack.c_msg_id_empty);
     END IF;
   
+    try_lock_payment(p_payment_id); -- пытаемся заблокировать клиента
+  
     allow_changes();
   
     UPDATE payment
-       SET status               = common_pack.c_status_cancel
+       SET status               = c_status_cancel
           ,status_change_reason = p_reason
      WHERE payment_id = p_payment_id
-       AND status = common_pack.c_status_created;
+       AND status = c_status_created;
   
     disallow_changes();
   
@@ -116,14 +119,15 @@ BEGIN
                              ,common_pack.c_msg_id_empty);
     END IF;
   
+    try_lock_payment(p_payment_id); -- пытаемся заблокировать клиента
+  
     allow_changes();
   
     UPDATE payment
-       SET status               = common_pack.c_status_success
+       SET status               = c_status_success
           ,status_change_reason = l_msg
      WHERE payment_id = p_payment_id
-       AND status = common_pack.c_status_created;
-
+       AND status = c_status_created;
     disallow_changes();
   
   EXCEPTION
@@ -140,7 +144,6 @@ BEGIN
     THEN
       raise_application_error(common_pack.c_error_code_manual_changes
                              ,common_pack.c_msg_manual_changes);
-
     END IF;
   
   END;
@@ -152,6 +155,26 @@ BEGIN
       raise_application_error(common_pack.c_error_code_delete_forbidden
                              ,common_pack.c_msg_delete_forbidden);
     END IF;
+  END;
+
+  PROCEDURE try_lock_payment(p_payment_id payment.payment_id%TYPE) IS
+    v_status payment.status%TYPE;
+  BEGIN
+    SELECT status INTO v_status FROM payment t WHERE t.payment_id = p_payment_id FOR UPDATE NOWAIT;
+  
+    IF v_status = c_status_success
+    THEN
+      raise_application_error(common_pack.c_error_code_final_status, common_pack.c_msg_final_status);
+    END IF;
+  
+  EXCEPTION
+    WHEN no_data_found THEN
+      raise_application_error(common_pack.c_error_code_object_no_found
+                             ,common_pack.c_msg_object_no_found);
+    WHEN common_pack.e_row_locked THEN
+      raise_application_error(common_pack.c_error_code_object_blocked
+                             ,common_pack.c_msg_object_blocked);
+    
   END;
 
 END payment_api_pack;
