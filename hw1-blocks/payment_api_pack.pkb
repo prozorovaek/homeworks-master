@@ -1,4 +1,3 @@
-﻿
 CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
@@ -23,7 +22,8 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
   ) RETURN payment.payment_id%TYPE IS
     p_create_dtime TIMESTAMP := systimestamp;
     v_payment_id   payment.payment_id%TYPE;
-  BEGIN
+
+BEGIN
   
     allow_changes();
   
@@ -76,6 +76,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
+
   END;
 
   PROCEDURE cancel_payment
@@ -122,6 +123,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
           ,status_change_reason = l_msg
      WHERE payment_id = p_payment_id
        AND status = common_pack.c_status_created;
+
     disallow_changes();
   
   EXCEPTION
@@ -138,6 +140,7 @@ CREATE OR REPLACE PACKAGE BODY payment_api_pack IS
     THEN
       raise_application_error(common_pack.c_error_code_manual_changes
                              ,common_pack.c_msg_manual_changes);
+
     END IF;
   
   END;

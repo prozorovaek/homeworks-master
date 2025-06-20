@@ -1,4 +1,5 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
   --разрешение менять данные
@@ -17,6 +18,7 @@
     p_payment_id     payment.payment_id%TYPE
    ,p_payment_detail t_payment_detail_array
   ) IS
+
   BEGIN
     IF p_payment_detail IS NOT empty
     THEN
@@ -37,7 +39,7 @@
       raise_application_error(common_pack.c_error_code_invalid_input_parameter
                              ,common_pack.c_msg_value_not_empty);
     END IF;
-  
+
     allow_changes();
   
     MERGE INTO payment_detail p
@@ -57,7 +59,7 @@
     WHEN OTHERS THEN
       disallow_changes();
       RAISE;
-    
+
   END;
 
   PROCEDURE delete_payment_detail
@@ -98,3 +100,4 @@
   END;
 END payment_detail_api_pack;
 /
+
