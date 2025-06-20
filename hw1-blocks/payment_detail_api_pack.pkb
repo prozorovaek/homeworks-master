@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
+CREATE OR REPLACE PACKAGE BODY payment_detail_api_pack IS
   g_is_api BOOLEAN := FALSE; -- признак, выполняется ли изменение через API
 
   --разрешение менять данные

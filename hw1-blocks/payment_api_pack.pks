@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE PACKAGE payment_api_pack IS
+CREATE OR REPLACE PACKAGE payment_api_pack IS
 
   /*﻿
   Автор: Прозорова Эльвира
