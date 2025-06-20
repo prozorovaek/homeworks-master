@@ -1,6 +1,5 @@
 CREATE OR REPLACE PACKAGE payment_api_pack IS
-
-  /*﻿
+  /*
   Автор: Прозорова Эльвира
   Описание скрипта: API для сущностей "Платеж" и "Детали платежа"
   */
@@ -17,6 +16,11 @@ CREATE OR REPLACE PACKAGE payment_api_pack IS
   c_msg_collection_empty CONSTANT VARCHAR2(100) := 'Коллекция не содержит данных';
 
   --Коды ошибок
+  c_error_code_invalid_input_parameter CONSTANT NUMBER(10) := -20101;
+
+  -- Объекты исключений
+  e_invalid_input_parameter EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_invalid_input_parameter, c_error_code_invalid_input_parameter);
 
   -- Создание платежа
   FUNCTION create_payment
